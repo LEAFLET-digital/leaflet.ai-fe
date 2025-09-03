@@ -1,6 +1,10 @@
-# Welcome to React Router!
+# Welcome to Leaflet.ai!
 
-A modern, production-ready template for building full-stack React applications using React Router.
+We are building a next-generation Vision AI platform that enables real-time, multi-camera human and fire detection, tracking, re-identification, and person search analytics. Our technology seamlessly integrates advanced computer vision with scalable infrastructure, empowering businesses, industries, and cities to achieve smarter security, faster emergency response, and deeper operational insights.
+
+By combining cutting-edge detection models with multi-camera tracking and re-ID capabilities, we provide a unified view of people and events across large, complex environments. Whether it’s identifying potential fire hazards in real time, tracking individuals across multiple cameras, or enabling intelligent search analytics, our platform delivers actionable intelligence at scale.
+
+We are on a mission to revolutionize the world of Vision AI, transforming video streams into real-time knowledge that makes spaces safer, more efficient, and future-ready.
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
