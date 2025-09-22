@@ -13,15 +13,39 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/dashboard": {
+    params: {};
+  };
+  "/dashboard/:userId/cameras": {
+    params: {
+      "userId": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.jsx": {
     id: "root";
+    page: "/" | "/dashboard" | "/dashboard/:userId/cameras";
+  };
+  "src/layouts/home.jsx": {
+    id: "src/layouts/home";
     page: "/";
   };
-  "routes/home.jsx": {
-    id: "routes/home";
+  "src/pages/home.jsx": {
+    id: "src/pages/home";
     page: "/";
+  };
+  "src/layouts/dashboard.jsx": {
+    id: "src/layouts/dashboard";
+    page: "/dashboard" | "/dashboard/:userId/cameras";
+  };
+  "src/pages/dashboard.jsx": {
+    id: "src/pages/dashboard";
+    page: "/dashboard";
+  };
+  "src/pages/cameras.jsx": {
+    id: "src/pages/cameras";
+    page: "/dashboard/:userId/cameras";
   };
 };

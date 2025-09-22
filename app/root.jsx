@@ -6,8 +6,20 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
+import { ClerkProvider } from "@clerk/clerk-react";
+import { useLocation } from "react-router";
 import "./app.css";
+import { UserProvider } from "./src/context/UserSelf";
+import { HttpsApiResponseProvider } from "./src/apiContext/httpsResponseContext";
+import Navbar from "./src/components/Navbar";
+import Footer from "./src/components/Footer";
+import SideNavbar from "./src/components/SideNavbar";
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Add your Clerk Publishable Key to the .env file");
+}
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -20,8 +32,15 @@ export const links = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
+  { rel: "icon", type: "image/png", href: "public/Images/logo.png" },
 ];
 
+export function meta({}) {
+  return [
+    { title: "Leaflet.ai" },
+    { name: "description", content: "Welcome to Leaflet.ai!" },
+  ];
+}
 export function Layout({ children }) {
   return (
     <html lang="en">
@@ -33,6 +52,7 @@ export function Layout({ children }) {
       </head>
       <body>
         {children}
+
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -41,7 +61,18 @@ export function Layout({ children }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const location = useLocation();
+  return (
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <UserProvider>
+        <HttpsApiResponseProvider>
+          <Navbar />
+          <Outlet />
+          {!location.pathname.startsWith("/dashboard") && <Footer />}
+        </HttpsApiResponseProvider>
+      </UserProvider>
+    </ClerkProvider>
+  );
 }
 
 export function ErrorBoundary({ error }) {
