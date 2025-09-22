@@ -9,145 +9,155 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import {
-  Menu,
-  ChevronLeft,
-  ChevronRight,
-  Mail,
-  MoveToInbox,
+  Dashboard,
+  Videocam,
+  Person,
+  Settings,
+  Analytics,
 } from "@mui/icons-material";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { useNavigate } from "react-router";
-import { useUser } from "@clerk/clerk-react";
-import GridViewIcon from "@mui/icons-material/GridView";
-import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
-import { useState } from "react";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
-const OpenedMixin = (theme) => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const ClosedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `60px`, // collapsed width (just icons)
-});
-
-const DrawerStyled = styled(Drawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+const DrawerStyled = styled(Drawer)(() => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+  height: "100%",
   "& .MuiDrawer-paper": {
-    top: "100px", // 👈 push below navbar
+    position: "static",
+    height: "100%",
+    width: drawerWidth,
+    background: "rgba(15, 23, 42, 0.95)",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderLeft: "none",
+    borderTop: "none",
+    borderBottom: "none",
+    overflowX: "hidden",
+    overflowY: "auto",
   },
-  ...(open && {
-    ...OpenedMixin(theme),
-    "& .MuiDrawer-paper": {
-      ...OpenedMixin(theme),
-      top: "90px",
-    },
-  }),
-  ...(!open && {
-    ...ClosedMixin(theme),
-    "& .MuiDrawer-paper": {
-      ...ClosedMixin(theme),
-      top: "90px",
-    },
-  }),
 }));
 
-const SideNavbar = () => {
-  const navigate = useNavigate();
+const SideNavbar = ({ navigate, location, userId }) => {
   const theme = useTheme();
-  const [selectedIndex, setSelectedIndex] = useState("Dashboard");
-  const [open, setOpen] = useState(true);
-  const { user } = useUser();
-  const userId = user ? user.id : null;
+  // Sidebar is always open now
+  const open = true;
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      {/* Sidebar */}
-      <DrawerStyled
-        variant="permanent"
-        open={open}
-        anchor="right" // <-- Add this line
-        PaperProps={{
-          className: "gradient-bg",
-          sx: {
-            color: "#22cc9cff",
-            borderLeft: "none", // Use borderLeft for right sidebar
-            borderRight: "none",
-          },
+  const menuItems = [
+    { text: "Dashboard", icon: <Dashboard />, path: "dashboard" },
+    { text: "Cameras", icon: <Videocam />, path: "cameras" },
+    { text: "Analytics", icon: <Analytics />, path: "analytics" },
+    { text: "Settings", icon: <Settings />, path: "settings" },
+    { text: "Profile", icon: <Person />, path: "profile" },
+  ];
+
+  const handleNavigation = (path) => {
+    if (navigate && userId) {
+      navigate(`/dashboard/${userId}/${path}`);
+    }
+  };
+
+  const isSelected = (path) => {
+    return location?.pathname?.includes(path) || false;
+  };
+
+  // Drawer content component
+  const DrawerContent = () => (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 2,
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          minHeight: 64,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start", // <-- Changed from "flex-end" to "flex-start"
-            p: 1,
-          }}
-        >
-          <IconButton onClick={() => setOpen(!open)}>
-            {open ? <ChevronRight /> : <Menu />}
-          </IconButton>
+        <Box sx={{ 
+          color: "white", 
+          fontWeight: 600, 
+          fontSize: "1.1rem"
+        }}>
+          Navigation
         </Box>
+      </Box>
 
-        <List>
-          {["Dashboard", "Cameras", "Drafts", "Spam", "Profile"].map(
-            (text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
+      {/* Menu Items */}
+      <List sx={{ 
+        mt: 2, 
+        px: 1, 
+        flex: 1,
+        '& .MuiListItem-root': {
+          mb: 1
+        }
+      }}>
+        {menuItems.map((item) => {
+          const selected = isSelected(item.path);
+          return (
+            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                onClick={() => handleNavigation(item.path)}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: "initial",
+                  px: 2,
+                  py: 1.5,
+                  borderRadius: 2,
+                  color: selected ? "rgba(59, 130, 246, 1)" : "rgba(156, 163, 175, 1)",
+                  backgroundColor: selected ? "rgba(59, 130, 246, 0.1)" : "transparent",
+                  border: selected ? "1px solid rgba(59, 130, 246, 0.3)" : "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: selected 
+                      ? "rgba(59, 130, 246, 0.15)" 
+                      : "rgba(255, 255, 255, 0.05)",
+                    color: "white",
+                    border: "1px solid rgba(59, 130, 246, 0.5)",
+                    transform: "translateX(2px)",
+                  },
+                }}
+              >
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                  onClick={() => {
-                    setSelectedIndex(text);
-                    navigate(`dashboard/${userId}/${text}`);
+                    minWidth: 0,
+                    mr: 3,
+                    justifyContent: "center",
+                    color: "inherit",
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 2 : "auto",
-                      justifyContent: "center",
-                      color: "#0879ebff",
-                    }}
-                  >
-                    {text === "Profile" ? (
-                      <AccountCircleOutlinedIcon />
-                    ) : text === "Dashboard" ? (
-                      <GridViewIcon />
-                    ) : text === "Cameras" ? (
-                      <VideoCameraFrontIcon />
-                    ) : (
-                      <Mail />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            )
-          )}
-        </List>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text} 
+                  sx={{ 
+                    color: "inherit",
+                    "& .MuiTypography-root": {
+                      fontWeight: selected ? 600 : 400,
+                      fontSize: "0.9rem"
+                    }
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }}>
+      <CssBaseline />
+      
+      {/* Always Visible Left Sidebar */}
+      <DrawerStyled variant="permanent" anchor="left">
+        <DrawerContent />
       </DrawerStyled>
     </Box>
   );

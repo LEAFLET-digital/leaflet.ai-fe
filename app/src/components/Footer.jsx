@@ -1,130 +1,152 @@
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
 import { HiLocationMarker } from "react-icons/hi";
 import { MdCall, MdMessage } from "react-icons/md";
-import { FaRobot } from "react-icons/fa";
-import { SignedOut, SignInButton } from "@clerk/clerk-react";
 
 const Footer = () => {
   return (
-    <div className="gradient-bg text-white px-5 relative z-50">
-      <section className="max-w-[1200px] mx-auto text-white">
-        <div className="grid md:grid-cols-3 py-5">
-          {/* first col */}
-          <div className="py-8 px-4">
-            <h1 className="text-xl sm:text-3xl font-bold sm:text-left text-justify mb-3">
-              Be Ready To Grow
-            </h1>
-            <p>
-              Get Exclusive <span className="font-bold">Update </span>straight
-              to your inbox. {/* Show login button if not signed in */}
-              <SignedOut>
-                <SignInButton mode="modal">
+    <footer className="relative text-white">
+      {/* Background with gradient */}
+      <div className="glass-effect border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8">
+            {/* Brand Section */}
+            <div className="md:col-span-2 lg:col-span-2">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 glow-text text-center md:text-left">LEAFLET.ai</h2>
+              <p className="text-gray-300 mb-6 leading-relaxed max-w-md text-center md:text-left mx-auto md:mx-0">
+                Transform your data into actionable insights with our advanced AI-powered 
+                Computer Vision platform. Join thousands of companies already leveraging 
+                the power of artificial intelligence.
+              </p>
+              
+              {/* Newsletter Signup */}
+              <div className="mb-6">
+                <h3 className="text-base sm:text-lg font-semibold mb-3 text-center md:text-left">Stay Updated</h3>
+                <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto md:mx-0">
+                  <div className="flex-1">
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all text-sm"
+                    />
+                  </div>
+                  <button className="modern-btn px-4 sm:px-6 py-3 whitespace-nowrap text-sm sm:text-base">
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex gap-3 sm:gap-4 justify-center md:justify-start">
+                {[
+                  { icon: FaLinkedin, href: "#", label: "LinkedIn" },
+                  { icon: FaTwitter, href: "#", label: "Twitter" },
+                  { icon: FaGithub, href: "#", label: "GitHub" },
+                  { icon: FaFacebook, href: "#", label: "Facebook" },
+                  { icon: FaInstagram, href: "#", label: "Instagram" },
+                ].map(({ icon: Icon, href, label }) => (
                   <a
-                    href="#"
-                    className="text-blue-500 hover:underline cursor-pointer"
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className="p-2.5 sm:p-3 rounded-xl glass-effect hover:bg-white/10 transition-all duration-300 group"
                   >
-                    signup
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:text-blue-400 transition-colors" />
                   </a>
-                </SignInButton>
-              </SignedOut>
-            </p>
+                ))}
+              </div>
+            </div>
 
-            <br />
-
-            <div className="flex items-center h-10">
-              <input
-                type="text"
-                className="py-1 px-3 w-full h-full  border-b-2 border-gray-200 focus:outline-none focus:border-sky-500 focus:ring-0"
-                placeholder="Search AI contents"
-              />
-              <button
-                className="ml-4 p-1 focus:outline-none text-gray-300 hover:text-sky-500"
-                aria-label="Search"
-              >
-                <FaRobot size={24} />
-              </button>
-            </div>
-          </div>
-          {/* second col */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 col-span-2 md:pl-10">
-            <div>
-              <div className="py-8 px-4">
-                <h1 className="text-xl font-bold mb-3">Our approach</h1>
-                <ul className="flex flex-col gap-3">
-                  <li>
-                    <a href="#">About AI</a>
+            {/* Quick Links */}
+            <div className="text-center md:text-left">
+              <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Solutions</h3>
+              <ul className="space-y-2 sm:space-y-3">
+                {[
+                  "Computer Vision",
+                  "AI Analytics", 
+                  "Real-time Processing",
+                  "Machine Learning",
+                  "Data Insights",
+                  "Enterprise AI"
+                ].map((item) => (
+                  <li key={item}>
+                    <a 
+                      href="#" 
+                      className="text-sm sm:text-base text-gray-300 hover:text-white transition-colors duration-300 relative group inline-block"
+                    >
+                      {item}
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
                   </li>
-                  <li>
-                    <a href="#">People</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div>
-              <div className="py-8 px-4">
-                <h1 className="text-xl font-bold mb-3">Research</h1>
-                <ul className="flex flex-col gap-3">
-                  <li>
-                    <a href="#">Infrastructure</a>
-                  </li>
-                  <li>
-                    <a href="#">Resources</a>
-                  </li>
-                  <li>
-                    <a href="#">Demos</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div>
-              <div className="py-8 px-4">
-                <h1 className="text-xl font-bold mb-2">Contact Us</h1>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <HiLocationMarker />
-                  <p>Haldia, West Bengal</p>
-                </div>
-                <div className="flex items-center gap-3 mt-3">
-                  <MdMessage />
-                  <p>leaflet.digital0308@gmail.com</p>
-                </div>
-                <div className="flex items-center gap-3 mt-3">
-                  <MdCall />
-                  <p>+91 9883489879</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* bottom section */}
-        <div className="hidden sm:block">
-          <div className="flex justify-between items-center py-6 border-t-2 border-gray-400">
-            <span className="text-sm text-gray-400">
-              copyright &copy; 2025 by Leaftlet.ai
-            </span>
-            <div className="flex items-center justify-center gap-4 pb-4">
-              <a href="#">
-                <FaInstagram className="text-4xl" />
-              </a>
-              <a href="#">
-                <FaFacebook className="text-4xl" />
-              </a>
-              <a href="#">
-                <FaLinkedin className="text-4xl" />
-              </a>
-            </div>
-            <span className="text-sm text-gray-400">
-              <ul className="flex gap-3">
-                <li>Privacy Policy</li>
-                <li>Terms & Conditions</li>
+                ))}
               </ul>
-            </span>
+            </div>
+
+            {/* Resources */}
+            <div className="text-center md:text-left">
+              <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Resources</h3>
+              <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                {[
+                  "Documentation",
+                  "API Reference",
+                  "Tutorials",
+                  "Blog",
+                  "Community",
+                  "Support"
+                ].map((item) => (
+                  <li key={item}>
+                    <a 
+                      href="#" 
+                      className="text-sm sm:text-base text-gray-300 hover:text-white transition-colors duration-300 relative group inline-block"
+                    >
+                      {item}
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              
+              {/* Contact Info */}
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-center gap-2 sm:gap-3 text-gray-300 justify-center md:justify-start">
+                  <MdCall className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm">+1 (555) 123-4567</span>
+                </div>
+                <div className="flex items-center gap-2 sm:gap-3 text-gray-300 justify-center md:justify-start">
+                  <MdMessage className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm">hello@leaflet.ai</span>
+                </div>
+                <div className="flex items-center gap-2 sm:gap-3 text-gray-300 justify-center md:justify-start">
+                  <HiLocationMarker className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm">San Francisco, CA</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-    </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+              <div className="text-xs sm:text-sm text-gray-400">
+                © 2025 LEAFLET.ai. All rights reserved.
+              </div>
+              <div className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-6 text-xs sm:text-sm">
+                {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((item) => (
+                  <a 
+                    key={item}
+                    href="#" 
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

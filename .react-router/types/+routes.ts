@@ -21,12 +21,27 @@ type Pages = {
       "userId": string;
     };
   };
+  "/dashboard/:userId/analytics": {
+    params: {
+      "userId": string;
+    };
+  };
+  "/dashboard/:userId/settings": {
+    params: {
+      "userId": string;
+    };
+  };
+  "/dashboard/:userId/profile": {
+    params: {
+      "userId": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.jsx": {
     id: "root";
-    page: "/" | "/dashboard" | "/dashboard/:userId/cameras";
+    page: "/" | "/dashboard" | "/dashboard/:userId/cameras" | "/dashboard/:userId/analytics" | "/dashboard/:userId/settings" | "/dashboard/:userId/profile";
   };
   "src/layouts/home.jsx": {
     id: "src/layouts/home";
@@ -38,7 +53,7 @@ type RouteFiles = {
   };
   "src/layouts/dashboard.jsx": {
     id: "src/layouts/dashboard";
-    page: "/dashboard" | "/dashboard/:userId/cameras";
+    page: "/dashboard" | "/dashboard/:userId/cameras" | "/dashboard/:userId/analytics" | "/dashboard/:userId/settings" | "/dashboard/:userId/profile";
   };
   "src/pages/dashboard.jsx": {
     id: "src/pages/dashboard";
@@ -47,5 +62,17 @@ type RouteFiles = {
   "src/pages/cameras.jsx": {
     id: "src/pages/cameras";
     page: "/dashboard/:userId/cameras";
+  };
+  "src/pages/analytics.jsx": {
+    id: "src/pages/analytics";
+    page: "/dashboard/:userId/analytics";
+  };
+  "src/pages/settings.jsx": {
+    id: "src/pages/settings";
+    page: "/dashboard/:userId/settings";
+  };
+  "src/pages/profile.jsx": {
+    id: "src/pages/profile";
+    page: "/dashboard/:userId/profile";
   };
 };
