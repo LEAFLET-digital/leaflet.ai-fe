@@ -139,7 +139,7 @@ const Navbar = () => {
         }`}>
           <div className="bg-black/80 backdrop-blur-md rounded-xl p-4 mt-4 border border-white/20 shadow-2xl">
             {/* Mobile Navigation */}
-            {!location.pathname.startsWith("/dashboard") && (
+            {location.pathname === "/dashboard" && (
               <div className="mb-6">
                 <ul className="space-y-3">
                   {navigationItems.map((item) => (
