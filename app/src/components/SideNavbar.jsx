@@ -17,6 +17,7 @@ import {
   Person,
   Settings,
   Analytics,
+  Business,
 } from "@mui/icons-material";
 
 const drawerWidth = 200;
@@ -51,6 +52,7 @@ const SideNavbar = ({ navigate, location, userId }) => {
     { text: "Dashboard", icon: <Dashboard />, path: "dashboard" },
     { text: "Cameras", icon: <Videocam />, path: "cameras" },
     { text: "Analytics", icon: <Analytics />, path: "analytics" },
+    { text: "Facility", icon: <Business />, path: "facility" },
     { text: "Settings", icon: <Settings />, path: "settings" },
     { text: "Profile", icon: <Person />, path: "profile" },
   ];

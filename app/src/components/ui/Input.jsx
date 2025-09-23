@@ -18,8 +18,8 @@ const Input = forwardRef(({
   const baseClasses = "w-full border rounded-lg transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed";
   
   const variants = {
-    default: "bg-slate-800 border-slate-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500",
-    glass: "glass-effect border-white/20 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-1 focus:ring-blue-400",
+    default: "bg-slate-700 border-slate-500 text-white placeholder-gray-300 focus:border-blue-400 focus:ring-1 focus:ring-blue-400",
+    glass: "bg-slate-700/90 backdrop-blur-md border-slate-500 text-white placeholder-gray-300 focus:border-blue-400 focus:ring-1 focus:ring-blue-400",
     solid: "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
   };
   

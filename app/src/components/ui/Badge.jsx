@@ -11,14 +11,14 @@ const Badge = forwardRef(({
   const baseClasses = "inline-flex items-center font-medium rounded-full transition-colors";
   
   const variants = {
-    default: "bg-gray-500/20 text-gray-300",
-    primary: "bg-blue-500/20 text-blue-400",
-    success: "bg-green-500/20 text-green-400",
-    warning: "bg-yellow-500/20 text-yellow-400",
-    danger: "bg-red-500/20 text-red-400",
-    info: "bg-cyan-500/20 text-cyan-400",
-    online: "bg-green-500/20 text-green-400",
-    offline: "bg-red-500/20 text-red-400"
+    default: "bg-gray-600 text-gray-100 border border-gray-500",
+    primary: "bg-blue-600 text-blue-100 border border-blue-500",
+    success: "bg-green-600 text-green-100 border border-green-500",
+    warning: "bg-yellow-600 text-yellow-100 border border-yellow-500",
+    danger: "bg-red-600 text-red-100 border border-red-500",
+    info: "bg-cyan-600 text-cyan-100 border border-cyan-500",
+    online: "bg-green-600 text-green-100 border border-green-500",
+    offline: "bg-red-600 text-red-100 border border-red-500"
   };
   
   const sizes = {

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
 import {
   PageContainer,
   PageHeader,
@@ -15,6 +16,7 @@ import {
 } from '../components';
 
 function Cameras() {
+  const location = useLocation();
   const [selectedCamera, setSelectedCamera] = useState({
     id: 1,
     name: 'Camera 1',
@@ -34,6 +36,36 @@ function Cameras() {
     { id: 5, name: 'Camera 5', status: 'Online', fps: 60, resolution: '3840x2160', location: 'Living Room' },
     { id: 6, name: 'Camera 6', status: 'Warning', fps: 15, resolution: '1920x1080', location: 'Basement' }
   ];
+
+  // Handle navigation from facility page
+  useEffect(() => {
+    if (location.state?.selectedCamera) {
+      const cameraName = location.state.selectedCamera;
+      const facility = location.state.facility;
+      
+      // Try to find a matching camera or create a temporary one
+      const foundCamera = cameras.find(camera => 
+        camera.name.toLowerCase().includes(cameraName.toLowerCase())
+      );
+      
+      if (foundCamera) {
+        setSelectedCamera(foundCamera);
+      } else {
+        // Create a temporary camera entry for the one from facility
+        setSelectedCamera({
+          id: cameras.length + 1,
+          name: cameraName,
+          status: 'Online',
+          fps: 30,
+          resolution: '1920x1080',
+          location: facility || 'Unknown Location'
+        });
+      }
+      
+      // Set search term to highlight the camera
+      setSearchTerm('');
+    }
+  }, [location.state]);
   
   const filteredCameras = cameras.filter(camera =>
     camera.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

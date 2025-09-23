@@ -12,13 +12,13 @@ const Stat = forwardRef(({
   ...props 
 }, ref) => {
   const colorClasses = {
-    blue: "text-blue-400",
-    green: "text-green-400",
-    purple: "text-purple-400",
-    yellow: "text-yellow-400",
-    red: "text-red-400",
-    cyan: "text-cyan-400",
-    orange: "text-orange-400"
+    blue: "text-blue-300",
+    green: "text-green-300",
+    purple: "text-purple-300",
+    yellow: "text-yellow-300",
+    red: "text-red-300",
+    cyan: "text-cyan-300",
+    orange: "text-orange-300"
   };
   
   const colorClass = colorClasses[color] || colorClasses.blue;
@@ -26,7 +26,7 @@ const Stat = forwardRef(({
   return (
     <div
       ref={ref}
-      className={`bg-slate-800/50 rounded-lg p-4 text-center ${className}`}
+      className={`bg-slate-700 border border-slate-600 rounded-lg p-4 text-center ${className}`}
       {...props}
     >
       {icon && (

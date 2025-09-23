@@ -22,8 +22,8 @@ const CameraCard = forwardRef(({
       ref={ref}
       className={`cursor-pointer transition-all duration-200 ${
         isSelected
-          ? 'bg-blue-600/30 border-2 border-blue-500'
-          : 'bg-slate-800/50 border-2 border-transparent hover:bg-slate-700/50'
+          ? 'bg-blue-600 border-2 border-blue-400'
+          : 'bg-slate-700 border-2 border-slate-600'
       } ${className}`}
       padding="p-4"
       onClick={() => onClick?.(camera)}

@@ -13,7 +13,7 @@ const Card = forwardRef(({
   const variants = {
     default: "modern-card",
     glass: "glass-effect",
-    solid: "bg-slate-800 border border-slate-700",
+    solid: "bg-slate-700 border border-slate-600",
     gradient: "gradient-bg"
   };
   

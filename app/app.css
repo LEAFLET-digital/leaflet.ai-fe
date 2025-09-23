@@ -23,7 +23,7 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, #000000 0%, #000000 50%, #16213e 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
   /* Mobile Safari viewport fix */
   -webkit-text-size-adjust: 100%;
 }
@@ -41,29 +41,29 @@ body {
 .gradient-bg {
   background: linear-gradient(
     135deg,
-    rgba(15, 23, 42, 0.95) 0%,
+    rgba(15, 23, 42, 0.98) 0%,
     rgba(30, 41, 59, 0.95) 25%,
-    rgba(51, 65, 85, 0.9) 50%,
-    rgba(30, 58, 138, 0.8) 75%,
-    rgba(59, 130, 246, 0.7) 100%
+    rgba(51, 65, 85, 0.95) 50%,
+    rgba(30, 58, 138, 0.9) 75%,
+    rgba(59, 130, 246, 0.85) 100%
   );
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .modern-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(30, 41, 59, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.4);
   border-radius: 16px;
   transition: all 0.3s ease;
 }
 
 .modern-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(51, 65, 85, 0.98);
+  border-color: rgba(59, 130, 246, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Mobile-specific hover states */
@@ -80,9 +80,9 @@ body {
 }
 
 .glass-effect {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(30, 41, 59, 0.8);
   backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
 .glow-text {
@@ -90,7 +90,7 @@ body {
 }
 
 .modern-btn {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #000000 0%, #1d4ed8 100%);
   border: none;
   border-radius: 12px;
   padding: 12px 24px;

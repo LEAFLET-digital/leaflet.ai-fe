@@ -11,6 +11,7 @@ export default [
       index("src/pages/dashboard.jsx"),
       route(":userId/cameras", "src/pages/cameras.jsx"),
       route(":userId/analytics", "src/pages/analytics.jsx"),
+      route(":userId/facility", "src/pages/facility.jsx"),
       route(":userId/settings", "src/pages/settings.jsx"),
       route(":userId/profile", "src/pages/profile.jsx"),
     ]),
