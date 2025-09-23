@@ -14,7 +14,13 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ["@mui/material", "@mui/icons-material"],
+    include: [
+      "@mui/material",
+      "@mui/icons-material",
+      "react",
+      "react-dom",
+      "react-router",
+    ],
     exclude: ["@mui/icons-material/esm/*"],
     force: true,
   },
@@ -25,5 +31,8 @@ export default defineConfig({
     rollupOptions: {
       maxParallelFileReads: 5,
     },
+  },
+  resolve: {
+    dedupe: ["react", "react-dom"],
   },
 });

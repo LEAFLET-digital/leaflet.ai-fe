@@ -134,10 +134,10 @@ const Navbar = () => {
         {/* Mobile Menu Dropdown */}
         <div className={`lg:hidden transition-all duration-300 ease-in-out ${
           isMobileMenuOpen 
-            ? 'max-h-screen opacity-100 py-4' 
+            ? 'max-h-screen text-white opacity-100 py-4' 
             : 'max-h-0 opacity-0 overflow-hidden'
         }`}>
-          <div className="glass-effect rounded-xl p-4 mt-4 border border-white/10">
+          <div className="bg-black/80 backdrop-blur-md rounded-xl p-4 mt-4 border border-white/20 shadow-2xl">
             {/* Mobile Navigation */}
             {!location.pathname.startsWith("/dashboard") && (
               <div className="mb-6">
