@@ -49,10 +49,10 @@ const SideNavbar = ({ navigate, location, userId }) => {
   const open = true;
 
   const menuItems = [
-    { text: "Dashboard", icon: <Dashboard />, path: "dashboard" },
+    { text: "Facility", icon: <Business />, path: "facility" },
     { text: "Cameras", icon: <Videocam />, path: "cameras" },
     { text: "Analytics", icon: <Analytics />, path: "analytics" },
-    { text: "Facility", icon: <Business />, path: "facility" },
+
     { text: "Settings", icon: <Settings />, path: "settings" },
     { text: "Profile", icon: <Person />, path: "profile" },
   ];
@@ -69,36 +69,20 @@ const SideNavbar = ({ navigate, location, userId }) => {
 
   // Drawer content component
   const DrawerContent = () => (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          p: 2,
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-          minHeight: 64,
-        }}
-      >
-        <Box sx={{ 
-          color: "white", 
-          fontWeight: 600, 
-          fontSize: "1.1rem"
-        }}>
-          Navigation
-        </Box>
-      </Box>
 
       {/* Menu Items */}
-      <List sx={{ 
-        mt: 2, 
-        px: 1, 
-        flex: 1,
-        '& .MuiListItem-root': {
-          mb: 1
-        }
-      }}>
+      <List
+        sx={{
+          mt: 2,
+          px: 1,
+          flex: 1,
+          "& .MuiListItem-root": {
+            mb: 1,
+          },
+        }}
+      >
         {menuItems.map((item) => {
           const selected = isSelected(item.path);
           return (
@@ -111,13 +95,19 @@ const SideNavbar = ({ navigate, location, userId }) => {
                   px: 2,
                   py: 1.5,
                   borderRadius: 2,
-                  color: selected ? "rgba(59, 130, 246, 1)" : "rgba(156, 163, 175, 1)",
-                  backgroundColor: selected ? "rgba(59, 130, 246, 0.1)" : "transparent",
-                  border: selected ? "1px solid rgba(59, 130, 246, 0.3)" : "1px solid transparent",
+                  color: selected
+                    ? "rgba(59, 130, 246, 1)"
+                    : "rgba(156, 163, 175, 1)",
+                  backgroundColor: selected
+                    ? "rgba(59, 130, 246, 0.1)"
+                    : "transparent",
+                  border: selected
+                    ? "1px solid rgba(59, 130, 246, 0.3)"
+                    : "1px solid transparent",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    backgroundColor: selected 
-                      ? "rgba(59, 130, 246, 0.15)" 
+                    backgroundColor: selected
+                      ? "rgba(59, 130, 246, 0.15)"
                       : "rgba(255, 255, 255, 0.05)",
                     color: "white",
                     border: "1px solid rgba(59, 130, 246, 0.5)",
@@ -135,15 +125,15 @@ const SideNavbar = ({ navigate, location, userId }) => {
                 >
                   {item.icon}
                 </ListItemIcon>
-                <ListItemText 
-                  primary={item.text} 
-                  sx={{ 
+                <ListItemText
+                  primary={item.text}
+                  sx={{
                     color: "inherit",
                     "& .MuiTypography-root": {
                       fontWeight: selected ? 600 : 400,
-                      fontSize: "0.9rem"
-                    }
-                  }} 
+                      fontSize: "0.9rem",
+                    },
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -154,9 +144,16 @@ const SideNavbar = ({ navigate, location, userId }) => {
   );
 
   return (
-    <Box sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <CssBaseline />
-      
+
       {/* Always Visible Left Sidebar */}
       <DrawerStyled variant="permanent" anchor="left">
         <DrawerContent />
