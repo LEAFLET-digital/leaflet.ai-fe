@@ -13,8 +13,6 @@ export default function Home() {
             alt="Background"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          {/* <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-blue-900/60 to-slate-800/90"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)]"></div> */}
         </div>
 
         {/* Hero Content */}
@@ -27,19 +25,20 @@ export default function Home() {
                   ✨ AI-Powered Computer Vision
                 </span>
               </div>
-              
+
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight">
                 Turn Raw Data into
                 <span className="block bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent glow-text mt-2">
                   Actionable Insights
                 </span>
               </h1>
-              
+
               <p className="text-base sm:text-lg lg:text-xl text-white mb-6 sm:mb-8 max-w-2xl leading-relaxed mx-auto lg:mx-0">
-                Leaflet.ai is an advanced AI-powered Computer Vision platform designed to transform 
-                raw data into actionable insights with unprecedented accuracy and speed.
+                Leaflet.ai is an advanced AI-powered Computer Vision platform
+                designed to transform raw data into actionable insights with
+                unprecedented accuracy and speed.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 sm:mb-12">
                 <button className="modern-btn text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto">
                   Get Started Free
@@ -48,19 +47,29 @@ export default function Home() {
                   Watch Demo
                 </button>
               </div>
-              
+
               <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-sm sm:max-w-md mx-auto lg:mx-0">
                 <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-white">99.9%</div>
-                  <div className="text-xs sm:text-sm text-gray-400">Accuracy</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">
+                    99.9%
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Accuracy
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-white">10x</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">
+                    10x
+                  </div>
                   <div className="text-xs sm:text-sm text-gray-400">Faster</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-white">24/7</div>
-                  <div className="text-xs sm:text-sm text-gray-400">Monitoring</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">
+                    24/7
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-400">
+                    Monitoring
+                  </div>
                 </div>
               </div>
             </div>
@@ -95,7 +104,8 @@ export default function Home() {
               Why Choose <span className="text-blue-400">Leaflet.ai</span>?
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-              Experience the future of data analysis with our cutting-edge AI technology
+              Experience the future of data analysis with our cutting-edge AI
+              technology
             </p>
           </div>
 
@@ -103,41 +113,54 @@ export default function Home() {
             {[
               {
                 title: "Real-time Processing",
-                description: "Process and analyze data streams in real-time with minimal latency",
-                icon: "⚡"
+                description:
+                  "Process and analyze data streams in real-time with minimal latency",
+                icon: "⚡",
               },
               {
                 title: "Advanced ML Models",
-                description: "State-of-the-art machine learning models trained on massive datasets",
-                icon: "🧠"
+                description:
+                  "State-of-the-art machine learning models trained on massive datasets",
+                icon: "🧠",
               },
               {
                 title: "Seamless Integration",
-                description: "Easy integration with existing systems and workflows",
-                icon: "🔗"
+                description:
+                  "Easy integration with existing systems and workflows",
+                icon: "🔗",
               },
               {
                 title: "Scalable Architecture",
-                description: "Built to scale from startup to enterprise level requirements",
-                icon: "📈"
+                description:
+                  "Built to scale from startup to enterprise level requirements",
+                icon: "📈",
               },
               {
                 title: "Secure & Compliant",
-                description: "Enterprise-grade security with full compliance standards",
-                icon: "🔒"
+                description:
+                  "Enterprise-grade security with full compliance standards",
+                icon: "🔒",
               },
               {
                 title: "24/7 Support",
-                description: "Round-the-clock support from our expert technical team",
-                icon: "🛠️"
-              }
+                description:
+                  "Round-the-clock support from our expert technical team",
+                icon: "🛠️",
+              },
             ].map((feature, index) => (
-              <div key={index} className="modern-card p-6 sm:p-8 text-center group">
+              <div
+                key={index}
+                className="modern-card p-6 sm:p-8 text-center group"
+              >
                 <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
                   {feature.icon}
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">{feature.title}</h3>
-                <p className="text-sm sm:text-base text-gray-300 leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">
+                  {feature.title}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -152,7 +175,8 @@ export default function Home() {
               Ready to Transform Your Data?
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 px-4">
-              Join thousands of companies already using Leaflet.ai to unlock insights from their data
+              Join thousands of companies already using Leaflet.ai to unlock
+              insights from their data
             </p>
             <button className="modern-btn text-white px-8 sm:px-12 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto">
               Start Your Free Trial
