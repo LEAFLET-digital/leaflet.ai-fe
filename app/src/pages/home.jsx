@@ -82,7 +82,6 @@ export default function Home() {
                   alt="AI Technology Visualization"
                   className="w-full max-w-xs sm:max-w-md lg:max-w-lg mx-auto drop-shadow-2xl"
                 />
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl blur-xl"></div>
               </div>
             </div>
           </div>

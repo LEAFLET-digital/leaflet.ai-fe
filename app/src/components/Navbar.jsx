@@ -15,7 +15,7 @@ const Navbar = () => {
   const { user } = useUser();
   const userId = user ? user.id : null;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   const navigationItems = [
     { name: "Our approach", href: "/our-approach" },
     { name: "Research", href: "/research" },
@@ -29,7 +29,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="glass-effect fixed top-0 w-full z-50 border-b border-white/10" style={{ height: '100px' }}>
+    <nav
+      className="glass-effect fixed top-0 w-full z-50 border-b border-white/10"
+      style={{ height: "100px" }}
+    >
       <div className="container mx-auto px-4 md:px-6 h-full">
         <div className="flex justify-between items-center h-full">
           {/* Logo Section */}
@@ -45,7 +48,6 @@ const Navbar = () => {
                   alt="Leaflet Logo"
                   className="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-lg"
                 />
-                <div className="absolute inset-0 bg-blue-400/20 rounded-lg blur-sm"></div>
               </div>
               <span className="glow-text text-xl md:text-2xl font-semibold tracking-wide">
                 <span className="hidden sm:inline">LEAFLET.ai</span>
@@ -53,15 +55,15 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-          
+
           {/* Desktop Navigation Menu */}
           {!location.pathname.startsWith("/dashboard") && (
             <div className="hidden lg:block">
               <ul className="flex items-center gap-6 xl:gap-8">
                 {navigationItems.map((item) => (
                   <li key={item.name}>
-                    <Link 
-                      to={item.href} 
+                    <Link
+                      to={item.href}
                       className="text-gray-300 hover:text-white transition-colors duration-300 font-medium relative group"
                     >
                       {item.name}
@@ -72,7 +74,7 @@ const Navbar = () => {
               </ul>
             </div>
           )}
-          
+
           {/* Action Buttons */}
           <div className="flex items-center gap-2 md:gap-4">
             {/* Authentication - Desktop */}
@@ -108,23 +110,35 @@ const Navbar = () => {
                 Get Started
               </button>
             </div>
-            
+
             {/* Mobile Menu Button */}
-            <button 
+            <button
               className="lg:hidden text-white p-2 hover:bg-white/10 rounded-xl transition-colors"
               onClick={toggleMobileMenu}
               aria-label="Toggle mobile menu"
             >
-              <svg 
-                className={`w-6 h-6 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`} 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className={`w-6 h-6 transition-transform duration-300 ${
+                  isMobileMenuOpen ? "rotate-90" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -132,11 +146,13 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Dropdown */}
-        <div className={`lg:hidden transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen 
-            ? 'max-h-screen text-white opacity-100 py-4' 
-            : 'max-h-0 opacity-0 overflow-hidden'
-        }`}>
+        <div
+          className={`lg:hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen
+              ? "max-h-screen text-white opacity-100 py-4"
+              : "max-h-0 opacity-0 overflow-hidden"
+          }`}
+        >
           <div className="bg-black/80 backdrop-blur-md rounded-xl p-4 mt-4 border border-white/20 shadow-2xl">
             {/* Mobile Navigation */}
             {location.pathname === "/dashboard" && (
@@ -144,7 +160,7 @@ const Navbar = () => {
                 <ul className="space-y-3">
                   {navigationItems.map((item) => (
                     <li key={item.name}>
-                      <Link 
+                      <Link
                         to={item.href}
                         className="block text-gray-300 hover:text-white transition-colors duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/5"
                         onClick={() => setIsMobileMenuOpen(false)}
@@ -161,7 +177,7 @@ const Navbar = () => {
             <div className="space-y-3 border-t border-white/10 pt-4">
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button 
+                  <button
                     className="w-full glass-effect text-white px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -194,7 +210,7 @@ const Navbar = () => {
                 )}
               </SignedIn>
 
-              <button 
+              <button
                 className="w-full modern-btn text-white font-semibold py-3"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
