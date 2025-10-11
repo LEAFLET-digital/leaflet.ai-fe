@@ -13,7 +13,7 @@ import { UserProvider } from "./src/context/UserSelf";
 import { HttpsApiResponseProvider } from "./src/apiContext/httpsResponseContext";
 import Navbar from "./src/components/Navbar";
 import Footer from "./src/components/Footer";
-import SideNavbar from "./src/components/SideNavbar";
+import { TokenProvider } from "./src/context/tokenContext";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -63,7 +63,7 @@ export function Layout({ children }) {
 export default function App() {
   const location = useLocation();
   return (
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <TokenProvider>
       <UserProvider>
         <HttpsApiResponseProvider>
           <Navbar />
@@ -71,7 +71,7 @@ export default function App() {
           {!location.pathname.startsWith("/dashboard") && <Footer />}
         </HttpsApiResponseProvider>
       </UserProvider>
-    </ClerkProvider>
+    </TokenProvider>
   );
 }
 
