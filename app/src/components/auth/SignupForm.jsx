@@ -3,56 +3,61 @@ import { useAuth } from "../../context/AuthContext";
 import { Button, Input, Card } from "../ui";
 
 const SignupForm = ({ onSuccess, onSwitchToLogin, className = "" }) => {
-  const [formData, setFormData] = useState({ 
-    email: "", 
-    password: "", 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
     confirmPassword: "",
     firstName: "",
-    lastName: "" 
+    lastName: "",
+    userName: "",
   });
   const [errors, setErrors] = useState({});
   const { signup, isLoading } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
-    
+
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
-    
+
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required";
     }
-    
+
+    if (!formData.userName.trim()) {
+      newErrors.userName = "Username is required";
+    }
+
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -61,9 +66,10 @@ const SignupForm = ({ onSuccess, onSwitchToLogin, className = "" }) => {
 
     const result = await signup(formData.email, formData.password, {
       first_name: formData.firstName,
-      last_name: formData.lastName
+      last_name: formData.lastName,
+      username: formData.userName,
     });
-    
+
     if (result.success) {
       onSuccess && onSuccess();
     } else {
@@ -72,7 +78,11 @@ const SignupForm = ({ onSuccess, onSwitchToLogin, className = "" }) => {
   };
 
   return (
-    <Card className={`p-6 w-full ${className}`} variant="glass" style={{ margin: 0 }}>
+    <Card
+      className={`p-6 w-full ${className}`}
+      variant="glass"
+      style={{ margin: 0 }}
+    >
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-white mb-2">Create Account</h2>
         <p className="text-gray-400">Join Leaflet.ai today</p>
@@ -103,6 +113,18 @@ const SignupForm = ({ onSuccess, onSwitchToLogin, className = "" }) => {
             onChange={handleChange}
             error={errors.lastName}
             autoComplete="family-name"
+          />
+        </div>
+
+        <div>
+          <Input
+            type="text"
+            name="userName"
+            placeholder="Username"
+            value={formData.userName}
+            onChange={handleChange}
+            error={errors.userName}
+            autoComplete="username"
           />
         </div>
 
