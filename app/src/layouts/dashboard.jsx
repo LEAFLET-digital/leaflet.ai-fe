@@ -2,8 +2,8 @@ import { Outlet, useNavigate, useLocation } from "react-router";
 import SideNavbar from "../components/SideNavbar";
 import Navbar from "../components/Navbar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import ProtectedRoute from "../apiContext/ProtectedRoute";
-import { useUser } from "@clerk/clerk-react";
+import { ProtectedRoute } from "../components/auth";
+import { useAuth } from "../context/AuthContext";
 
 const theme = createTheme({
   palette: {
@@ -25,8 +25,8 @@ const theme = createTheme({
 function DashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useUser();
-  const userId = user ? user.id : null;
+  const { user } = useAuth();
+  const userId = user ? user.user_id : null;
 
   return (
     <ThemeProvider theme={theme}>

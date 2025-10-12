@@ -1,20 +1,18 @@
 import Logo from "../../../public/Images/logo.png";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { AuthModal, UserButton } from "./auth";
+import { Button } from "./ui";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useUser();
-  const userId = user ? user.id : null;
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const userId = user ? user.user_id : null;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState("login");
 
   const navigationItems = [
     { name: "Our approach", href: "/our-approach" },
@@ -79,36 +77,49 @@ const Navbar = () => {
           <div className="flex items-center gap-2 md:gap-4">
             {/* Authentication - Desktop */}
             <div className="hidden sm:flex items-center gap-2 md:gap-4">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base">
+              {!isAuthenticated ? (
+                <>
+                  <button 
+                    onClick={() => {
+                      setAuthModalMode("login");
+                      setShowAuthModal(true);
+                    }}
+                    className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
+                  >
                     Log in
                   </button>
-                </SignInButton>
-              </SignedOut>
+                  <button 
+                  onClick={() => {
+                    setAuthModalMode("signup");
+                    setShowAuthModal(true);
+                  }}
+                  className="modern-btn text-white font-semibold px-4 md:px-6 py-2 md:py-2.5 text-sm md:text-base"
+                >
+                  Get Started
+                </button>
+                  
+                </>
+              ) : (
+                <>
+                  {location.pathname.startsWith("/dashboard") ? (
+                    <button
+                      onClick={() => navigate("/")}
+                      className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
+                    >
+                      Home
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => navigate(`/dashboard/${userId}`)}
+                      className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
+                    >
+                      Dashboard
+                    </button>
+                  )}
+                  <UserButton />
+                </>
+              )}
 
-              <SignedIn>
-                {location.pathname !== "/dashboard" ? (
-                  <button
-                    onClick={() => navigate(`/dashboard`)}
-                    className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
-                  >
-                    Dashboard
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => navigate("/")}
-                    className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
-                  >
-                    Home
-                  </button>
-                )}
-              </SignedIn>
-
-              {/* CTA Button */}
-              <button className="modern-btn text-white font-semibold px-4 md:px-6 py-2 md:py-2.5 text-sm md:text-base">
-                Get Started
-              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -175,51 +186,66 @@ const Navbar = () => {
 
             {/* Mobile Authentication */}
             <div className="space-y-3 border-t border-white/10 pt-4">
-              <SignedOut>
-                <SignInButton mode="modal">
+              {!isAuthenticated ? (
+                <>
                   <button
+                    onClick={() => {
+                      setAuthModalMode("login");
+                      setShowAuthModal(true);
+                      setIsMobileMenuOpen(false);
+                    }}
                     className="w-full glass-effect text-white px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40"
-                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Log in
                   </button>
-                </SignInButton>
-              </SignedOut>
-
-              <SignedIn>
-                {location.pathname !== "/dashboard" ? (
+                  
                   <button
                     onClick={() => {
-                      navigate(`/dashboard`);
+                      setAuthModalMode("signup");
+                      setShowAuthModal(true);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full glass-effect text-white px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40"
+                    className="w-full modern-btn text-white font-semibold py-3"
                   >
-                    Go to Dashboard
+                    Get Started
                   </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      navigate("/");
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full glass-effect text-white px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40"
-                  >
-                    Back to Home
-                  </button>
-                )}
-              </SignedIn>
-
-              <button
-                className="w-full modern-btn text-white font-semibold py-3"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Get Started
-              </button>
+                </>
+              ) : (
+                <>
+                  {location.pathname.startsWith("/dashboard") ? (
+                    <button
+                      onClick={() => {
+                        navigate("/");
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full glass-effect text-white px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40"
+                    >
+                      Back to Home
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        navigate(`/dashboard/${userId}`);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full glass-effect text-white px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40"
+                    >
+                      Go to Dashboard
+                    </button>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        defaultMode={authModalMode}
+      />
     </nav>
   );
 };

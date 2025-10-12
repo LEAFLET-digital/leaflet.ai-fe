@@ -6,20 +6,15 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { ClerkProvider } from "@clerk/clerk-react";
 import { useLocation } from "react-router";
 import "./app.css";
 import { UserProvider } from "./src/context/UserSelf";
 import { HttpsApiResponseProvider } from "./src/apiContext/httpsResponseContext";
+import { AuthProvider } from "./src/context/AuthContext";
+import { AuthTokenSync } from "./src/context/AuthTokenSync";
 import Navbar from "./src/components/Navbar";
 import Footer from "./src/components/Footer";
 import { TokenProvider } from "./src/context/tokenContext";
-
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Add your Clerk Publishable Key to the .env file");
-}
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -63,15 +58,19 @@ export function Layout({ children }) {
 export default function App() {
   const location = useLocation();
   return (
-    <TokenProvider>
-      <UserProvider>
-        <HttpsApiResponseProvider>
-          <Navbar />
-          <Outlet />
-          {!location.pathname.startsWith("/dashboard") && <Footer />}
-        </HttpsApiResponseProvider>
-      </UserProvider>
-    </TokenProvider>
+    <AuthProvider>
+      <TokenProvider>
+        <AuthTokenSync>
+          <UserProvider>
+            <HttpsApiResponseProvider>
+              <Navbar />
+              <Outlet />
+              {!location.pathname.startsWith("/dashboard") && <Footer />}
+            </HttpsApiResponseProvider>
+          </UserProvider>
+        </AuthTokenSync>
+      </TokenProvider>
+    </AuthProvider>
   );
 }
 

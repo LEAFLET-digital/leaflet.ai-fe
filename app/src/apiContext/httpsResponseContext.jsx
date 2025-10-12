@@ -1,7 +1,7 @@
-import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { createContext, useCallback, useContext } from "react";
 import { useTokenContext } from "../context/tokenContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export const HttpsApiResponse = createContext(undefined);
 
@@ -27,25 +27,29 @@ const createApiErrorResponse = (error) => {
 };
 
 export const HttpsApiResponseProvider = ({ children }) => {
-  const { token } = useTokenContext();
+  const { token, getToken, isAuthenticated } = useTokenContext();
 
   AxiosService.defaults.headers.common["Content-Type"] = "application/json";
   AxiosService.defaults.headers.common["Accept"] = "application/json";
 
   const attachToken = useCallback(async () => {
     try {
-      if (isSignedIn && isLoaded) {
-        const response = await getToken();
-        if (response) {
-          AxiosService.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${response}`;
+      if (isAuthenticated && token) {
+        AxiosService.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      } else if (isAuthenticated) {
+        // Try to get/refresh token if we don't have one
+        const refreshedToken = await getToken();
+        if (refreshedToken) {
+          AxiosService.defaults.headers.common["Authorization"] = `Bearer ${refreshedToken}`;
         }
+      } else {
+        // Remove authorization header if not authenticated
+        delete AxiosService.defaults.headers.common["Authorization"];
       }
     } catch (error) {
       console.error("Error fetching credentials:", error);
     }
-  }, [isSignedIn, isLoaded, getToken]);
+  }, [isAuthenticated, token, getToken]);
 
   const get = useCallback(
     async (endpoint) => {

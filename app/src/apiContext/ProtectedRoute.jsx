@@ -1,14 +1,2 @@
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
-
-const ProtectedRoute = ({ children }) => {
-  return (
-    <>
-      <SignedIn>{children}</SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-    </>
-  );
-};
-
-export default ProtectedRoute;
+// This file is now deprecated - use ../components/auth/ProtectedRoute.jsx instead
+export { default } from "../components/auth/ProtectedRoute";

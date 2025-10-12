@@ -267,3 +267,40 @@ body {
     text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
   }
 }
+
+/* Modal Specific Styles */
+.auth-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.auth-modal-content {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  margin: 0 auto !important;
+  z-index: 10000 !important;
+}
+
+#modal-root {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
+#modal-root > * {
+  pointer-events: all !important;
+}
