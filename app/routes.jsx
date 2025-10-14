@@ -9,14 +9,14 @@ export default [
   route("auth", "src/pages/auth.jsx"),
 
   // Dashboard layout + nested routes
-  ...prefix("dashboard", [
+  ...prefix("dashboard/:userId", [
     layout("src/layouts/dashboard.jsx", [
       index("src/pages/dashboard.jsx"),
-      route(":userId/cameras", "src/pages/cameras.jsx"),
-      route(":userId/analytics", "src/pages/analytics.jsx"),
-      route(":userId/facility", "src/pages/facility.jsx"),
-      route(":userId/settings", "src/pages/settings.jsx"),
-      route(":userId/profile", "src/pages/profile.jsx"),
+      route("cameras", "src/pages/cameras.jsx"),
+      route("analytics", "src/pages/analytics.jsx"),
+      route("facility", "src/pages/facility.jsx"),
+      route("settings", "src/pages/settings.jsx"),
+      route("profile", "src/pages/profile.jsx"),
     ]),
   ]),
 ];

@@ -101,21 +101,14 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  {location.pathname.startsWith("/dashboard") ? (
-                    <button
-                      onClick={() => navigate("/")}
-                      className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
-                    >
-                      Home
-                    </button>
-                  ) : (
+                 
                     <button
                       onClick={() => navigate(`/dashboard/${userId}`)}
                       className="glass-effect text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300 font-medium border border-white/20 hover:border-white/40 text-sm md:text-base"
                     >
                       Dashboard
                     </button>
-                  )}
+                
                   <UserButton />
                 </>
               )}

@@ -13,7 +13,18 @@ const createApiErrorResponse = (error) => {
   let errorMessage = "An error occurred while processing your request.";
 
   if (error.response) {
-    errorMessage = error.response.data?.detail || errorMessage;
+    // Handle different response formats
+    if (error.response.data?.detail) {
+      errorMessage = error.response.data.detail;
+    } else if (error.response.data?.error) {
+      errorMessage = error.response.data.error;
+    } else if (error.response.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.response.status === 401) {
+      errorMessage = "Authentication credentials were not provided.";
+    } else {
+      errorMessage = `Server error: ${error.response.status}`;
+    }
   } else if (error.request) {
     errorMessage = "No response received from the server.";
   } else {
@@ -32,15 +43,43 @@ export const HttpsApiResponseProvider = ({ children }) => {
   AxiosService.defaults.headers.common["Content-Type"] = "application/json";
   AxiosService.defaults.headers.common["Accept"] = "application/json";
 
+  // Add response interceptor to handle token refresh on 401
+  AxiosService.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        
+        try {
+          const newToken = await getToken();
+          if (newToken) {
+            AxiosService.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+            return AxiosService(originalRequest);
+          }
+        } catch (refreshError) {
+          console.error("Token refresh failed in interceptor:", refreshError);
+        }
+      }
+      
+      return Promise.reject(error);
+    }
+  );
+
   const attachToken = useCallback(async () => {
     try {
-      if (isAuthenticated && token) {
+      if (token) {
         AxiosService.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       } else if (isAuthenticated) {
-        // Try to get/refresh token if we don't have one
+        // Try to get/refresh token if we don't have one but are authenticated
         const refreshedToken = await getToken();
         if (refreshedToken) {
           AxiosService.defaults.headers.common["Authorization"] = `Bearer ${refreshedToken}`;
+        } else {
+          // If we can't get a token but should be authenticated, clear auth header
+          delete AxiosService.defaults.headers.common["Authorization"];
         }
       } else {
         // Remove authorization header if not authenticated
@@ -48,6 +87,8 @@ export const HttpsApiResponseProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error fetching credentials:", error);
+      // On error, remove auth header to prevent stale token usage
+      delete AxiosService.defaults.headers.common["Authorization"];
     }
   }, [isAuthenticated, token, getToken]);
 

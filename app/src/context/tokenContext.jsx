@@ -5,12 +5,28 @@ const TokenContext = createContext();
 export const TokenProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const getToken = useCallback(async () => {
     try {
       // If we already have a valid token, return it
       if (token) {
         return token;
+      }
+
+      // If we're already refreshing, wait for it to complete
+      if (isRefreshing) {
+        // Wait for refresh to complete
+        return new Promise((resolve) => {
+          const checkToken = () => {
+            if (!isRefreshing) {
+              resolve(token);
+            } else {
+              setTimeout(checkToken, 100);
+            }
+          };
+          checkToken();
+        });
       }
 
       // Otherwise, try to refresh
@@ -20,11 +36,17 @@ export const TokenProvider = ({ children }) => {
       console.error("Error getting token:", err);
       return null;
     }
-  }, [token]);
+  }, [token, isRefreshing]);
 
   // Legacy compatibility - keep this for existing code
   const legacyRefreshToken = useCallback(async () => {
+    // Prevent multiple simultaneous refresh requests
+    if (isRefreshing) {
+      return null;
+    }
+
     try {
+      setIsRefreshing(true);
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_API_URL}/api/user/refresh-token/`,
         {
@@ -39,13 +61,17 @@ export const TokenProvider = ({ children }) => {
         return data.access;
       } else {
         console.error("Failed to refresh access token");
+        setToken(null);
         return null;
       }
     } catch (err) {
       console.error("Error refreshing token:", err);
+      setToken(null);
       return null;
+    } finally {
+      setIsRefreshing(false);
     }
-  }, []);
+  }, [isRefreshing]);
 
   return (
     <TokenContext.Provider value={{ 
@@ -54,7 +80,8 @@ export const TokenProvider = ({ children }) => {
       getToken,
       refreshToken: legacyRefreshToken, // For backward compatibility
       isAuthenticated,
-      setIsAuthenticated
+      setIsAuthenticated,
+      isRefreshing
     }}>
       {children}
     </TokenContext.Provider>
