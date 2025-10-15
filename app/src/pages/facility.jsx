@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
   PageContainer,
@@ -9,39 +9,14 @@ import {
   SearchInput,
   Badge
 } from '../components';
+import manageCameraFacilityApi from '../apiContext/mangeCameraFacility';
 
 function Facility() {
   const navigate = useNavigate();
   const { userId } = useParams();
-  const [facilities, setFacilities] = useState([
-    {
-      id: 1,
-      name: 'Main Office Building',
-      location: 'Downtown District',
-      description: 'Primary office complex with multiple floors',
-      cameras: ['Camera 1', 'Camera 2', 'Camera 3', 'Camera 4'],
-      status: 'Active',
-      createdAt: '2024-01-15'
-    },
-    {
-      id: 2,
-      name: 'Warehouse A',
-      location: 'Industrial Zone',
-      description: 'Main storage and distribution center',
-      cameras: ['Camera 5', 'Camera 6'],
-      status: 'Active',
-      createdAt: '2024-02-10'
-    },
-    {
-      id: 3,
-      name: 'Parking Lot',
-      location: 'Building Perimeter',
-      description: 'Employee and visitor parking area',
-      cameras: ['Camera 7'],
-      status: 'Maintenance',
-      createdAt: '2024-03-05'
-    }
-  ]);
+  const [facilities, setFacilities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -49,11 +24,44 @@ function Facility() {
   const [showManageModal, setShowManageModal] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedFacilityForCamera, setSelectedFacilityForCamera] = useState(null);
+
+  const { 
+    getFacilities, 
+    addFacility, 
+    updateFacility, 
+    deleteFacility, 
+    addCamera, 
+    updateCamera, 
+    deleteCamera 
+  } = manageCameraFacilityApi();
   
   const filteredFacilities = facilities.filter(facility =>
-    facility.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    facility.location.toLowerCase().includes(searchTerm.toLowerCase())
+    facility.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    facility.location?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Load facilities on component mount
+  useEffect(() => {
+    loadFacilities();
+  }, []);
+
+  const loadFacilities = async () => {
+    try {
+      setLoading(true);
+      const response = await getFacilities();
+      if (response.success) {
+        setFacilities(response.response);
+        setError(null);
+      } else {
+        setError(response.errorMsg);
+      }
+    } catch (err) {
+      setError('Failed to load facilities');
+      console.error('Error loading facilities:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAddFacility = () => {
     setShowAddModal(true);
@@ -70,12 +78,78 @@ function Facility() {
     setShowCameraModal(true);
   };
 
-  const handleCameraClick = (cameraName, facilityName) => {
+  const handleCreateFacility = async (facilityData) => {
+    try {
+      const response = await addFacility(facilityData);
+      if (response.success) {
+        await loadFacilities(); // Refresh the list
+        setShowAddModal(false);
+      } else {
+        setError(response.errorMsg);
+      }
+    } catch (err) {
+      setError('Failed to create facility');
+      console.error('Error creating facility:', err);
+    }
+  };
+
+  const handleUpdateFacility = async (facilityData) => {
+    try {
+      const response = await updateFacility(selectedFacility.id, facilityData);
+      if (response.success) {
+        await loadFacilities(); // Refresh the list
+        setShowManageModal(false);
+        setSelectedFacility(null);
+      } else {
+        setError(response.errorMsg);
+      }
+    } catch (err) {
+      setError('Failed to update facility');
+      console.error('Error updating facility:', err);
+    }
+  };
+
+  const handleDeleteFacility = async (facilityId) => {
+    if (window.confirm('Are you sure you want to delete this facility?')) {
+      try {
+        const response = await deleteFacility(facilityId);
+        if (response.success) {
+          await loadFacilities(); // Refresh the list
+        } else {
+          setError(response.errorMsg);
+        }
+      } catch (err) {
+        setError('Failed to delete facility');
+        console.error('Error deleting facility:', err);
+      }
+    }
+  };
+
+  const handleCreateCamera = async (cameraData) => {
+    try {
+      const response = await addCamera({
+        ...cameraData,
+        facilityId: selectedFacilityForCamera.id
+      });
+      if (response.success) {
+        await loadFacilities(); // Refresh the list
+        setShowCameraModal(false);
+        setSelectedFacilityForCamera(null);
+      } else {
+        setError(response.errorMsg);
+      }
+    } catch (err) {
+      setError('Failed to add camera');
+      console.error('Error adding camera:', err);
+    }
+  };
+
+  const handleCameraClick = (camera, facilityName) => {
     // Navigate to cameras page with camera information
     if (userId) {
       navigate(`/dashboard/${userId}/cameras`, {
         state: {
-          selectedCamera: cameraName,
+          selectedCamera: camera,
           facility: facilityName
         }
       });
@@ -83,18 +157,18 @@ function Facility() {
   };
 
   const FacilityCard = ({ facility }) => {
-    const statusVariant = facility.status === 'Active' ? 'success' : 'warning';
+    const statusVariant = 'success'; // Default to active since backend doesn't return status
     
     return (
       <Card className="h-full">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-xl font-semibold text-white mb-2">{facility.name}</h3>
+            <h3 className="text-xl font-semibold text-white mb-2">{facility.facilityName}</h3>
             <p className="text-gray-300 text-sm mb-1">{facility.location}</p>
             <p className="text-gray-400 text-xs">{facility.description}</p>
           </div>
           <Badge variant={statusVariant} size="sm">
-            {facility.status}
+            Active
           </Badge>
         </div>
         
@@ -102,21 +176,21 @@ function Facility() {
           <div className="flex items-center justify-between mb-3">
             <span className="text-gray-300 text-sm font-medium">Cameras</span>
             <Badge variant="primary" size="sm">
-              {facility.cameras.length}
+              {facility.cameras?.length || 0}
             </Badge>
           </div>
           
           <div className="space-y-2">
-            {facility.cameras.slice(0, 2).map((camera, index) => (
+            {(facility.cameras || []).slice(0, 2).map((camera, index) => (
               <div 
-                key={index} 
+                key={camera.id || index} 
                 className="bg-slate-600/80 border border-slate-500 rounded-lg p-3 cursor-pointer hover:bg-slate-600 hover:border-slate-400 transition-all duration-200 hover:shadow-lg"
-                onClick={() => handleCameraClick(camera, facility.name)}
+                onClick={() => handleCameraClick(camera, facility.facilityName)}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-white text-sm font-medium">{camera}</span>
+                    <span className="text-white text-sm font-medium">{camera.cameraName}</span>
                   </div>
                   <Badge variant="success" size="sm">Online</Badge>
                 </div>
@@ -138,13 +212,13 @@ function Facility() {
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     </svg>
-                    <span>North Side</span>
+                    <span>{camera.direction || camera.location || 'N/A'}</span>
                   </div>
                   <div className="flex items-center gap-1 text-gray-300">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Human Detection</span>
+                    <span>{camera.modelTopic || 'Human Detection'}</span>
                   </div>
                 </div>
                 
@@ -157,20 +231,20 @@ function Facility() {
               </div>
             ))}
             
-            {facility.cameras.length > 2 && (
+            {(facility.cameras?.length || 0) > 2 && (
               <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-2 text-center">
                 <div className="flex items-center justify-center gap-2">
                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
                   <span className="text-sm text-gray-400">
-                    +{facility.cameras.length - 2} more cameras
+                    +{(facility.cameras?.length || 0) - 2} more cameras
                   </span>
                 </div>
               </div>
             )}
             
-            {facility.cameras.length === 0 && (
+            {(!facility.cameras || facility.cameras.length === 0) && (
               <div className="bg-slate-700/30 border border-slate-600 border-dashed rounded-lg p-4 text-center">
                 <svg className="w-6 h-6 text-gray-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -448,29 +522,26 @@ function Facility() {
       { value: 'object_counting', label: 'Object Counting' }
     ];
 
-    const handleCameraSubmit = (e) => {
+    const handleCameraSubmit = async (e) => {
       e.preventDefault();
       
       if (!selectedFacilityForCamera) return;
       
-      const newCamera = {
-        id: Date.now(),
-        ...cameraFormData,
-        facilityId: selectedFacilityForCamera.id,
-        status: 'Online',
-        createdAt: new Date().toISOString().split('T')[0]
+      const cameraData = {
+        cameraName: cameraFormData.name,
+        location: cameraFormData.location,
+        direction: cameraFormData.side,
+        area: cameraFormData.area,
+        rtspUrl: cameraFormData.rtspUrl,
+        description: cameraFormData.description,
+        modelTopic: cameraFormData.aiVisionModel || 'Human-detection',
+        modelType: 'Computer Vision',
+        facilityId: selectedFacilityForCamera.id
       };
       
-      // Update the facility with the new camera
-      setFacilities(prevFacilities => 
-        prevFacilities.map(facility => 
-          facility.id === selectedFacilityForCamera.id
-            ? { ...facility, cameras: [...facility.cameras, `${cameraFormData.name} (${cameraFormData.side})`] }
-            : facility
-        )
-      );
+      await handleCreateCamera(cameraData);
       
-      // Reset form and close modal
+      // Reset form
       setCameraFormData({
         name: '',
         location: '',
@@ -654,18 +725,17 @@ function Facility() {
       description: ''
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      const newFacility = {
-        id: facilities.length + 1,
-        ...formData,
-        cameras: [],
-        status: 'Active',
-        createdAt: new Date().toISOString().split('T')[0]
+      const facilityData = {
+        facilityName: formData.name,
+        location: formData.location,
+        description: formData.description,
+        organization: ''
       };
-      setFacilities([...facilities, newFacility]);
+      
+      await handleCreateFacility(facilityData);
       setFormData({ name: '', location: '', description: '' });
-      setShowAddModal(false);
     };
 
     if (!showAddModal) return null;
@@ -749,6 +819,37 @@ function Facility() {
     );
   };
 
+  if (loading) {
+    return (
+      <PageContainer>
+        <PageHeader 
+          title="Facility Management"
+          description="Manage your facilities and their associated cameras"
+        />
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+        </div>
+      </PageContainer>
+    );
+  }
+
+  if (error) {
+    return (
+      <PageContainer>
+        <PageHeader 
+          title="Facility Management"
+          description="Manage your facilities and their associated cameras"
+        />
+        <div className="flex flex-col items-center justify-center h-64 space-y-4">
+          <div className="text-red-400 text-lg">{error}</div>
+          <Button variant="primary" onClick={loadFacilities}>
+            Retry
+          </Button>
+        </div>
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer>
       <PageHeader 
@@ -772,28 +873,23 @@ function Facility() {
           Add Facility
         </Button>
       </div>
-      
-      <Grid cols="1" mdCols="2" lgCols="3" gap="6">
-        {filteredFacilities.map((facility) => (
-          <FacilityCard key={facility.id} facility={facility} />
-        ))}
-      </Grid>
-      
-      {filteredFacilities.length === 0 && (
-        <Card className="text-center py-12">
-          <div className="text-gray-400 mb-4">
-            <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          </div>
-          <h3 className="text-lg font-medium text-white mb-2">No facilities found</h3>
-          <p className="text-gray-400 mb-6">
-            {searchTerm ? 'Try adjusting your search terms' : 'Get started by adding your first facility'}
-          </p>
+
+      {filteredFacilities.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 space-y-4">
+          <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+          <div className="text-gray-400 text-lg">No facilities found</div>
           <Button variant="primary" onClick={handleAddFacility}>
-            Add Facility
+            Create your first facility
           </Button>
-        </Card>
+        </div>
+      ) : (
+        <Grid cols="1" mdCols="2" lgCols="3" gap="6">
+          {filteredFacilities.map((facility) => (
+            <FacilityCard key={facility.id} facility={facility} />
+          ))}
+        </Grid>
       )}
       
       <FacilityManageModal />
