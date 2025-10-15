@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
-import modelDemoApi from '../apiContext/modelDemoApi';
 import {
   PageContainer,
   PageHeader,
@@ -18,16 +17,13 @@ import {
 
 function Cameras() {
   const location = useLocation();
-  const { startInference, stopInference } = modelDemoApi();
-
   const [selectedCamera, setSelectedCamera] = useState({
     id: 1,
     name: 'Camera 1',
     status: 'Online',
     fps: 30,
     resolution: '1920x1080',
-    location: 'Front Door',
-    task_id: null,
+    location: 'Front Door'
   });
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,11 +36,6 @@ function Cameras() {
     { id: 5, name: 'Camera 5', status: 'Online', fps: 60, resolution: '3840x2160', location: 'Living Room' },
     { id: 6, name: 'Camera 6', status: 'Warning', fps: 15, resolution: '1920x1080', location: 'Basement' }
   ];
-
-  // keep local mutable camera list for demo; in future populate from API
-  const [cameraList, setCameraList] = useState(cameras);
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [previewTaskId, setPreviewTaskId] = useState(null);
 
   // Handle navigation from facility page
   useEffect(() => {
@@ -115,45 +106,6 @@ function Cameras() {
     setSelectedCamera(camera);
   };
 
-  const handleStartPreview = async (cameraId) => {
-    // Start preview via API
-    try {
-      const payload = {
-        cameraId,
-        // If backend expects rtsp/model info, include from camera
-        rtspUrl: selectedCamera.rtspUrl || '',
-        modelType: selectedCamera.modelType || 'Computer Vision',
-        modelTopic: selectedCamera.modelTopic || 'Human-detection',
-      };
-      const res = await startInference(payload);
-      if (res?.success) {
-        const taskId = res.response?.task_id || res.response?.taskId || res.response?.id || null;
-        setIsPreviewing(true);
-        setPreviewTaskId(taskId);
-        setSelectedCamera((c) => ({ ...c, task_id: taskId }));
-      } else {
-        console.error('Start preview failed', res.errorMsg);
-      }
-    } catch (err) {
-      console.error('Start preview error', err);
-    }
-  };
-
-  const handleStopPreview = async (taskId) => {
-    try {
-      const res = await stopInference({ task_id: taskId });
-      if (res?.success) {
-        setIsPreviewing(false);
-        setPreviewTaskId(null);
-        setSelectedCamera((c) => ({ ...c, task_id: null }));
-      } else {
-        console.error('Stop preview failed', res.errorMsg);
-      }
-    } catch (err) {
-      console.error('Stop preview error', err);
-    }
-  };
-
   return (
     <PageContainer>
       <PageHeader 
@@ -199,11 +151,6 @@ function Cameras() {
                     camera={camera}
                     isSelected={selectedCamera.id === camera.id}
                     onClick={handleCameraSelect}
-                    onViewLive={(cam) => {
-                      // when clicking View Live from card, select and start preview
-                      setSelectedCamera(cam);
-                      handleStartPreview(cam.id || cam.name);
-                    }}
                   />
                 ))}
               </div>

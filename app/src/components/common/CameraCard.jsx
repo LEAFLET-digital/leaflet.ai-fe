@@ -6,7 +6,6 @@ const CameraCard = forwardRef(({
   camera,
   isSelected = false,
   onClick,
-  onViewLive, // optional handler
   className = "",
   ...props 
 }, ref) => {
@@ -43,19 +42,6 @@ const CameraCard = forwardRef(({
         <span>{camera.resolution}</span>
         <span>{camera.fps} FPS</span>
       </div>
-      {onViewLive && (
-        <div className="mt-3 flex">
-          <button
-            className="bg-blue-600 text-white px-3 py-1 rounded text-sm w-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              onViewLive(camera);
-            }}
-          >
-            View Live
-          </button>
-        </div>
-      )}
     </Card>
   );
 });

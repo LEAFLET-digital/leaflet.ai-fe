@@ -5,10 +5,8 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 export const HttpsApiResponse = createContext(undefined);
 
-const baseURL = import.meta.env.VITE_BACKEND_API_URL || window?.__LEAFLET_BACKEND_URL__ || "";
-
 const AxiosService = axios.create({
-  baseURL,
+  baseURL: import.meta.env.VITE_BACKEND_API_URL,
 });
 
 const createApiErrorResponse = (error) => {

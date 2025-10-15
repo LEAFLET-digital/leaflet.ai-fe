@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import modelDemoApi from '../apiContext/modelDemoApi';
 import {
   PageContainer,
   PageHeader,
@@ -80,26 +79,6 @@ function Facility() {
           facility: facilityName
         }
       });
-    }
-  };
-
-  const { startInference } = modelDemoApi();
-
-  const handleViewLiveFromFacility = async (cameraName, facilityName) => {
-    // navigate to cameras and attempt to start preview there as well
-    if (userId) {
-      navigate(`/dashboard/${userId}/cameras`, {
-        state: {
-          selectedCamera: cameraName,
-          facility: facilityName
-        }
-      });
-    }
-    // optionally start preview request (best-effort)
-    try {
-      await startInference({ cameraId: cameraName, rtspUrl: '' });
-    } catch (err) {
-      console.error('Failed to request preview start', err);
     }
   };
 
