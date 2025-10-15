@@ -6,6 +6,10 @@ const CameraFeed = forwardRef(({
   width = "w-[800px]",
   height = "h-[410px]",
   className = "",
+  onStartPreview, // (cameraId) => Promise
+  onStopPreview, // (taskId) => Promise
+  isPreviewing = false,
+  previewTaskId = null,
   ...props 
 }, ref) => {
   if (!camera) return null;
@@ -40,6 +44,32 @@ const CameraFeed = forwardRef(({
               <div className="absolute top-4 left-4 bg-red-600 w-3 h-3 rounded-full animate-pulse"></div>
               <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
                 REC
+              </div>
+              <div className="absolute bottom-4 left-4 flex gap-2">
+                {!isPreviewing ? (
+                  <button
+                    className="bg-green-600 text-white px-3 py-1 rounded text-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onStartPreview?.(camera.id || camera.cameraId || camera.name);
+                    }}
+                  >
+                    Start Preview
+                  </button>
+                ) : (
+                  <button
+                    className="bg-red-600 text-white px-3 py-1 rounded text-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onStopPreview?.(previewTaskId);
+                    }}
+                  >
+                    Stop Preview
+                  </button>
+                )}
+                {previewTaskId && (
+                  <span className="text-xs text-gray-200 ml-2">Task: {previewTaskId}</span>
+                )}
               </div>
             </div>
           ) : (

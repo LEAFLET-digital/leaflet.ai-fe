@@ -1,4 +1,4 @@
-import Logo from "../../../public/Images/logo.png";
+import Logo from "/Images/logo.png";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";

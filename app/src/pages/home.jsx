@@ -1,5 +1,5 @@
-import bgImg from "../../../public/Images/wallpaper.jpg";
-import bgOverImg from "../../../public/Images/wallpaper-tech.png";
+import bgImg from "/Images/wallpaper.jpg";
+import bgOverImg from "/Images/wallpaper-tech.png";
 
 export default function Home() {
   return (
