@@ -53,19 +53,17 @@ class WebSocketService {
 
           if (typeof data === "string") {
             frameData = JSON.parse(data);
-          } else if (
-            data instanceof ArrayBuffer ||
-            data instanceof Uint8Array
-          ) {
-            // Handle binary msgpack data - for now just log it
-            console.log(
-              "Received binary frame data, size:",
-              data.length || data.byteLength
-            );
-            return;
           } else {
+            // Data should now be a JSON object with base64 encoded frame
             frameData = data;
           }
+
+          console.log("📡 Received processed frame:", {
+            camera_id: frameData.camera_id,
+            count: frameData.count,
+            ids: frameData.ids,
+            frameSize: frameData.frame ? frameData.frame.length : 0,
+          });
 
           const cameraId = frameData.camera_id;
 
