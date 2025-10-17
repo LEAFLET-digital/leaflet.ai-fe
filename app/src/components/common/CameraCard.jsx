@@ -30,7 +30,7 @@ const CameraCard = forwardRef(({
       {...props}
     >
       <div className="flex justify-between items-start mb-2">
-        <h4 className="font-semibold text-white">{camera.name}</h4>
+        <h4 className="font-semibold text-white">{camera.cameraName || camera.name}</h4>
         <Badge variant={statusVariant} dot size="sm">
           {camera.status}
         </Badge>

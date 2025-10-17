@@ -230,7 +230,7 @@ function Cameras() {
                   <CameraCard
                     key={camera.id}
                     camera={camera}
-                    isSelected={selectedCamera.id === camera.id}
+                    isSelected={selectedCamera?.id === camera.id}
                     onClick={handleCameraSelect}
                   />
                 ))}
