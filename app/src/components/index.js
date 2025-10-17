@@ -3,6 +3,7 @@ export * from "./ui";
 export * from "./layout";
 export * from "./common";
 export * from "./auth";
+export * from "./facility";
 
 // Legacy components (existing ones)
 export { default as Navbar } from "./Navbar";
