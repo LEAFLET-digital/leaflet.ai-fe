@@ -15,6 +15,7 @@ import { AuthTokenSync } from "./src/context/AuthTokenSync";
 import Navbar from "./src/components/Navbar";
 import Footer from "./src/components/Footer";
 import { TokenProvider } from "./src/context/tokenContext";
+import { WebSocketProvider } from "./src/context/WebSocketContext";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -63,9 +64,11 @@ export default function App() {
         <AuthTokenSync>
           <UserProvider>
             <HttpsApiResponseProvider>
-              <Navbar />
-              <Outlet />
-              {!location.pathname.startsWith("/dashboard") && <Footer />}
+              <WebSocketProvider>
+                <Navbar />
+                <Outlet />
+                {!location.pathname.startsWith("/dashboard") && <Footer />}
+              </WebSocketProvider>
             </HttpsApiResponseProvider>
           </UserProvider>
         </AuthTokenSync>

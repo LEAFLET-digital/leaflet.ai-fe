@@ -17,6 +17,7 @@ export default [
       route("facility", "src/pages/facility.jsx"),
       route("settings", "src/pages/settings.jsx"),
       route("profile", "src/pages/profile.jsx"),
+      route("websocket-test", "src/pages/websocket-test.jsx"),
     ]),
   ]),
 ];

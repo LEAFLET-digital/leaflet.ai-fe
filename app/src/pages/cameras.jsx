@@ -12,7 +12,8 @@ import {
   CameraFeed,
   StatsGrid,
   Button,
-  Card
+  Card,
+  MockCameraSender
 } from '../components';
 import manageCameraFacilityApi from '../apiContext/mangeCameraFacility';
 
@@ -191,8 +192,14 @@ function Cameras() {
         leftColumn={
           <div className="flex flex-col space-y-6">
             {/* Camera Feed */}
-            <CameraFeed camera={selectedCamera} />
+            <CameraFeed 
+              camera={selectedCamera} 
+              enableWebSocket={true}
+            />
             
+            {/* Mock Camera Sender for Testing */}
+            <MockCameraSender cameraId={selectedCamera?.id || "test_camera_001"} />
+
             {/* Analytics Section */}
             <Card>
               <h3 className="text-xl font-semibold text-white mb-4">Analytics & Performance</h3>
